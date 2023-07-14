@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FaceHair</title>
+    <style>
+        *{
+            padding: 0px;
+            margin: 0px;
+            font-family: Calibri;
+        }
+
+        body{
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            align-items: center;
+        }
+
+        .logo{
+            width: 90%;
+            border-radius: 0px 0px 50px 50px;
+            box-shadow: 0px 5px 20px 0px #0000003d;
+
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 10px 0px;
+            box-sizing: border-box;
+            margin-bottom: 30px;
+        }
+
+        .logo img{
+            height: 100px;
+        }
+
+        form{
+            width: 90%;
+            border-radius: 40px;
+            box-shadow: 0px 5px 20px 0px #0000003d;
+
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px 0px;
+            box-sizing: border-box;
+        }
+
+        form label{
+            font-size: 1.2rem;
+            text-align: center;
+            margin: 10px;
+            font-weight: bold;
+        }
+
+        .file{
+            font-size: 1rem;
+            width: 210px;
+            margin: 10px;
+        }
+
+        .button{
+            padding: 10px 20px;
+            font-size: 1.2rem;
+            border-radius: 50px;
+            border: none;
+            background-color: black;
+            color: white;
+            margin: 10px;
+        }
+
+
+        .kutu {
+            width: 90%;
+            border-radius: 40px;
+            box-shadow: 0px 5px 20px 0px #0000003d;
+
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+            box-sizing: border-box;
+            margin-bottom: 30px;
+        }
+
+        .kutu p {
+            padding: 10px 3%;
+            box-sizing: border-box;
+            text-align: justify;
+            
+        }
+        .kutu2{
+            width: 80%;
+            display: flex;
+            flex-wrap: wrap;
+            box-sizing: border-box;
+            justify-content: center;
+        }
+
+        .kutu2 img, .kutu img{
+            height: 20rem;
+            margin: 20px;
+        }
+
+        .kutu > * {
+            margin: 10px;
+        }
+    </style>
+</head>
+<body>
+    <a class="logo" href="">
+        <img src="media/logo.png" alt="logo">
+    </a>
+    <form enctype="multipart/form-data" method="POST">
+        {% csrf_token %}
+        {{ form }}
+        <input class="button" type="submit" value="Bana Uygun Saç Modelini Bul">
+    </form>
+    
+    {% if form.is_bound %}
+        <div class="kutu" style="margin-top: 30px;">
+            <h1>Yüz Şekliniz: {{ form.instance.predicted_shape }}</h1>
+            <img src="{{ form.instance.image.url }}" alt="yüklenen_resim">
+    
+            <h2>{{ form.instance.predicted_shape }} Yüz Şekli İçin Öneriler</h2>
+
+            {% if form.instance.predicted_shape == "Kalp" %}
+            <p>Alın kısmı geniş, çene kısmı dar olan yüz tipleri buraya! Kalp yüz şekline göre saç kesiminden bahsedeceğimiz bu bölümde, sizin için en uygun saç modelini bulabilirsiniz. Kalp yüz tipine sahip olanlar, saçlarını çene hattına kadar düz getirip oradan sonra hareketlendirmeli. Bu sayede zaten geniş olan üst kafa bölgesini basık göstererek bütün dikkati çeneye çekebilirler. Ayrıca bu model, alnın bir kısmını kaplayarak üstteki orantısızlığı da yok etmeye yardımcı olacaktır.</p>
+            {% elif form.instance.predicted_shape == "Kare" %}
+            <p>Çene kemiklerinin ön planda olduğu kare yüz tipine sahip kişiler, doğru saç modelini kullanarak harika görüntüler elde edebilir. Kare yüz tipine göre saç modelleri arasında, dalgalı ya da düz olması fark etmeksizin uzun saçlar yer alıyor. Saçlarınızı omuz hizasında ya da omuzlardan aşağıda konumlandırırsanız yüzünüzü daha ince gösterme konusunda başarılı sonuçlar elde edebilirsiniz. Angelina Jolie, bu yüz tipi için harika bir örnek. Köşeli çene ve geniş alınla öne çıkan bu yüz tipinde kullanılacak uzun saçlar, dikkati yüzden alıp aşağılara çekeceği için oldukça kullanışlı.</p>
+            {% elif form.instance.predicted_shape == "Uzun" %}
+            <p>Uzunluğu, genişliğinden büyük olan yüz tipleri, bu sınıfta yer alıyor. Eğer siz de uzun yük şekline sahipseniz saçlarınızı hacimli ve dalgalı kullanarak yüzünüzü, olduğundan daha oval gösterebilirsiniz. Upuzun ya da kısacık düz saçlar, yüzünüzü daha da uzatacağı için pek size göre değil. Yüzünüzü yuvarlak göstermeye yardımcı olacak kaküller ya da yandan perçemler, uzun yüz şekline göre saç modellerinde denenebilecek ayrıntılardan. Ancak, burada dikkat etmeniz gereken bir konu var: Saçlarınızın ten renginizden koyu bir tonda olması gerektiği. Zira saç renginiz teninizden daha açık olursa yüzünüzü uzun gösterme çabanız boşa gidecektir. İlla saçlarınızı açık renkte kullanmak isterseniz tercihinizi, gölgeli ya da ombreli saçlardan yana kullanmayı deneyin!</p>
+            {% elif form.instance.predicted_shape == "Yuvarlak" %}
+            <p>Yanakların ön plana çıktığı neredeyse dairesel formlu yüz tipleri, yuvarlak yüz sınıfına giriyor. Eğer sizin de yüzünüz bu şekildeyse yüzünüzün formuna uygun saç modellerine yönelerek en doğru kararı verebilirsiniz. Peki, yuvarlak yüz şekline göre saç modelleri hangileri? Saç modeline karar verirken favori modelinizden ziyade size en çok yakışacak olan modelde karar kılmalısınız. Yuvarlak yüzler için de bu model, genellikle başın üzerinde hacimlenen saç modelleri olarak öne çıkıyor. Zira bu modeller, yüzün yuvarlaklığını bir nebze alarak yüzü ovalleştiriyor. Yani aslında asimetrik saç modelleri, yuvarlak saçlılar için uygun. Ayrıca saçın uzunluğu da omuz hizasında olsa iyi olur. Ancak kısa saçlılar da üzülmesin. Onlar için de bir çözümümüz var. Katlı kesimler, kısa saçlara hacim vererek yüzü ovalleştirme konusunda son derece başarılı. Siz de küt saçlarınıza biraz kat attırarak uzun süre rahatlıkla kullanabilirsiniz. Son olarak eğer saçlarınız uzunsa kulak hizasında at kuyruğu yapmak da yuvarlak yüzlerde işe yarayacaktır. Saçınızı ortadan ikiye ayırın ve kulaklarla aynı hizaya gelecek şekilde toplayın. İşte bu kadar!</p>
+            {% elif form.instance.predicted_shape == "Oval" %}
+            <p>Yanlardan basık oval yüz tipinde olanlar, saç modeli çeşitliliği konusunda son derece şanslı. Kısa, uzun, spor, klasik, dalgalı, düz, açık ya da toplu... Oval yüz tipine göre saç modelleri bu anlamda oldukça fazla seçeneğe sahip. Tüm bu modeller arasında en çok dikkat çekeni ise yumuşak dalgalarla hareketlenen omuz hizasındaki saçlar olacaktır. Saçınızı ortadan ayırıp geniş dalgalar verdiğinizde oval yüzünüze harika bir romantiklik katmayı başarabilirsiniz. Ayrıca eğer saçlarınız küt kesimse uçlara uygulanan içe ve dışa şekillendirmeler ile tarzınıza dinamizm katmayı deneyin. Muhteşem görüneceksiniz! Son olarak iddialı görünmeyi sevenlerdenseniz saçlarınızı kısacık kestirmek de size yakışacaktır. Çoğunlukla sadece oval yüze sahip kişilere yakışan erkek kesim saç modellerinde farklı renkler de deneyerek özgünlüğün tadını çıkarabilirsiniz.</p>
+            {% endif %}
+
+            <h2>Örnek Saç Modelleriniz</h2>
+            <div class="kutu2">
+                <img src="{{ form.instance.oneri1 }} " alt="">
+                <img src="{{ form.instance.oneri2 }} " alt="">
+                <img src="{{ form.instance.oneri3 }} " alt="">
+                <img src="{{ form.instance.oneri4 }} " alt="">
+                <img src="{{ form.instance.oneri5 }} " alt="">
+            </div>
+        </div>
+    {% endif %}
+    
+</body>
+</html>
