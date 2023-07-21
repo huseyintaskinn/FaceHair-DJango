@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="tr">
 <head>
@@ -5,119 +6,20 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>FaceHair</title>
-    <style>
-        *{
-            padding: 0px;
-            margin: 0px;
-            font-family: Calibri;
-        }
-
-        body{
-            display: flex;
-            flex-direction: column;
-            justify-content: flex-start;
-            align-items: center;
-        }
-
-        .logo{
-            width: 90%;
-            border-radius: 0px 0px 50px 50px;
-            box-shadow: 0px 5px 20px 0px #0000003d;
-
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 10px 0px;
-            box-sizing: border-box;
-            margin-bottom: 30px;
-        }
-
-        .logo img{
-            height: 100px;
-        }
-
-        form{
-            width: 90%;
-            border-radius: 40px;
-            box-shadow: 0px 5px 20px 0px #0000003d;
-
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding: 20px 0px;
-            box-sizing: border-box;
-        }
-
-        form label{
-            font-size: 1.2rem;
-            text-align: center;
-            margin: 10px;
-            font-weight: bold;
-        }
-
-        .file{
-            font-size: 1rem;
-            width: 210px;
-            margin: 10px;
-        }
-
-        .button{
-            padding: 10px 20px;
-            font-size: 1.2rem;
-            border-radius: 50px;
-            border: none;
-            background-color: black;
-            color: white;
-            margin: 10px;
-        }
-
-
-        .kutu {
-            width: 90%;
-            border-radius: 40px;
-            box-shadow: 0px 5px 20px 0px #0000003d;
-
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding: 20px;
-            box-sizing: border-box;
-            margin-bottom: 30px;
-        }
-
-        .kutu p {
-            padding: 10px 3%;
-            box-sizing: border-box;
-            text-align: justify;
-            
-        }
-        .kutu2{
-            width: 80%;
-            display: flex;
-            flex-wrap: wrap;
-            box-sizing: border-box;
-            justify-content: center;
-        }
-
-        .kutu2 img, .kutu img{
-            height: 20rem;
-            margin: 20px;
-        }
-
-        .kutu > * {
-            margin: 10px;
-        }
-    </style>
+    <link rel="stylesheet" href="{% static 'css/mystyle.css' %}">
 </head>
 <body>
     <a class="logo" href="">
-        <img src="media/logo.png" alt="logo">
+        <img src="{% static 'images/logo.png' %}" alt="logo">
     </a>
-    <form enctype="multipart/form-data" method="POST">
+    <form id="form" enctype="multipart/form-data" method="POST">
         {% csrf_token %}
-        {{ form }}
-        <input class="button" type="submit" value="Bana Uygun Saç Modelini Bul">
+        {{ form.image.label_tag }} 
+        {{ form.image }}
+        <input id="bul-button" class="button" type="submit" value="Bana Uygun Saç Modelini Bul" onclick="processForm();" required>
     </form>
+
+    <div id="loader"></div>
     
     {% if form.is_bound %}
         <div class="kutu" style="margin-top: 30px;">
@@ -148,6 +50,27 @@
             </div>
         </div>
     {% endif %}
-    
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <script>
+        function processForm() {
+            var imageInput = document.getElementById('{{ form.image.auto_id }}');
+            if (imageInput && imageInput.files.length === 0) {
+                alert("Lütfen resim yükleyin.");
+                return false; // Formun gönderimini engeller.
+            }
+
+            var button = document.getElementById("bul-button");
+            button.value = "İşleniyor... Lütfen bekleyin...";
+            button.disabled = true;
+            button.classList.add("loading"); // "loading" sınıfını ekleyerek rengi değiştir
+
+            $("#loader").show();
+
+            // Formu sunucuya gönder
+            document.getElementById("form").submit();
+        }
+    </script>
 </body>
 </html>
