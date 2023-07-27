@@ -35,6 +35,7 @@ DEBUG = env('DEBUG')
 allowed_hosts_str = env('ALLOWED_HOSTS')
 ALLOWED_HOSTS = ast.literal_eval(allowed_hosts_str)
 
+
 # Application definition
 
 INSTALLED_APPS = [
